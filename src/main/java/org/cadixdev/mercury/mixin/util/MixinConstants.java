@@ -15,6 +15,7 @@ public final class MixinConstants {
     public static final String MIXIN_CLASS = MIXIN_PACKAGE + ".Mixin";
     public static final String SHADOW_CLASS = MIXIN_PACKAGE + ".Shadow";
     public static final String OVERWRITE_CLASS = MIXIN_PACKAGE + ".Overwrite";
+    public static final String PROXY_CLASS = MIXIN_PACKAGE + ".Proxy";
     public static final String FINAL_CLASS = MIXIN_PACKAGE + ".Final";
     public static final String MUTABLE_CLASS = MIXIN_PACKAGE + ".Mutable";
 
