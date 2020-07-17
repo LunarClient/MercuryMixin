@@ -69,7 +69,10 @@ public class MixinClass extends MixinData {
     public String[] getTargetNames() {
         final String[] targets = new String[this.targets.length + this.privateTargets.length];
         for (int i = 0; i < this.targets.length; i++) {
-            targets[i] = this.targets[i].getBinaryName();
+            ITypeBinding target = this.targets[i];
+            if (target != null) {
+                targets[i] = target.getBinaryName();
+            }
         }
         System.arraycopy(this.privateTargets, 0, targets, this.targets.length, this.privateTargets.length);
         return targets;

@@ -139,7 +139,9 @@ public class MixinRemapperVisitor extends ASTVisitor {
         if (mixin == null) return;
 
         // todo: support multiple targets properly
-        final ClassMapping<?, ?> target = this.mappings.computeClassMapping(mixin.getTargetNames()[0]).orElse(null);
+        String targetName = mixin.getTargetNames()[0];
+        if (targetName == null) return;
+        final ClassMapping<?, ?> target = this.mappings.computeClassMapping(targetName).orElse(null);
         if (target == null) return;
 
         for (final IAnnotationBinding annotation : binding.getAnnotations()) {
@@ -168,13 +170,16 @@ public class MixinRemapperVisitor extends ASTVisitor {
     public boolean visit(final MethodDeclaration node) {
         final AST ast = this.context.getCompilationUnit().getAST();
         final IMethodBinding binding = node.resolveBinding();
+        if (binding == null) return false;
 
         final ITypeBinding declaringClass = binding.getDeclaringClass();
         final MixinClass mixin = MixinClass.fetch(declaringClass, this.mappings);
         if (mixin == null) return true;
 
         // todo: support multiple targets properly
-        final ClassMapping<?, ?> target = this.mappings.computeClassMapping(mixin.getTargetNames()[0]).orElse(null);
+        String mixinTargetName = mixin.getTargetNames()[0];
+        if (mixinTargetName == null) return true;
+        final ClassMapping<?, ?> target = this.mappings.computeClassMapping(mixinTargetName).orElse(null);
         if (target == null) return true;
 
         // todo: handle private targets

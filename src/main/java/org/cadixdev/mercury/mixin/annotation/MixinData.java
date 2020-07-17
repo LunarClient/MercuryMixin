@@ -43,7 +43,9 @@ public class MixinData {
 
                 targets = new ITypeBinding[targetsTemp.length];
                 for (int i = 0; i < targetsTemp.length; i++) {
-                    targets[i] = (ITypeBinding) targetsTemp[i];
+                    if (targetsTemp[i] instanceof ITypeBinding) {
+                        targets[i] = (ITypeBinding) targetsTemp[i];
+                    }
                 }
 
             }
