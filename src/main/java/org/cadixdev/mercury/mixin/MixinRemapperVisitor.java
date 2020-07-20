@@ -139,10 +139,14 @@ public class MixinRemapperVisitor extends ASTVisitor {
         if (mixin == null) return;
 
         // todo: support multiple targets properly
+<<<<<<< HEAD
         String targetName = mixin.getTargetNames()[0];
         if (targetName == null) return;
         final ClassMapping<?, ?> target = this.mappings.computeClassMapping(targetName).orElse(null);
         if (target == null) return;
+=======
+        final ClassMapping<?, ?> target = this.mappings.getOrCreateClassMapping(mixin.getTargetNames()[0]);
+>>>>>>> abf5480... Remap classes when there are no mappings for it (use inheritance data)
 
         for (final IAnnotationBinding annotation : binding.getAnnotations()) {
             final String annotationType = annotation.getAnnotationType().getBinaryName();
@@ -179,8 +183,7 @@ public class MixinRemapperVisitor extends ASTVisitor {
         // todo: support multiple targets properly
         String mixinTargetName = mixin.getTargetNames()[0];
         if (mixinTargetName == null) return true;
-        final ClassMapping<?, ?> target = this.mappings.computeClassMapping(mixinTargetName).orElse(null);
-        if (target == null) return true;
+        final ClassMapping<?, ?> target = this.mappings.getOrCreateClassMapping(mixinTargetName);
 
         // todo: handle private targets
         // todo: only complete the mixin we are targeting
