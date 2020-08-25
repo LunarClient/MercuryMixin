@@ -15,7 +15,7 @@ java {
 
 group = 'org.cadixdev'
 archivesBaseName = project.name.toLowerCase()
-version = '0.1.0-SNAPSHOT'
+version = 'lunar-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -23,6 +23,9 @@ repositories {
         maven {
             url 'https://oss.sonatype.org/content/groups/public/'
         }
+    }
+    maven {
+        url "https://maven.moonsworth.com/repository/lunarclient-public"
     }
 }
 
