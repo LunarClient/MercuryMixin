@@ -90,17 +90,13 @@ publishing {
             }
         }
     }
-    repositories {
-        if (project.hasProperty('ossrhUsername') && project.hasProperty('ossrhPassword')) {
-            maven {
-                url = !version.endsWith('-SNAPSHOT') ?
-                        'https://oss.sonatype.org/service/local/staging/deploy/maven2/' :
-                        'https://oss.sonatype.org/content/repositories/snapshots/'
 
-                credentials {
-                    username = ossrhUsername
-                    password = ossrhPassword
-                }
+    repositories {
+        maven {
+            url = uri("https://maven.moonsworth.com/repository/lunarclient-public")
+            credentials {
+                username = project.property("mavenUsername").toString()
+                password = project.property("mavenPassword").toString()
             }
         }
     }
