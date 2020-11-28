@@ -64,7 +64,6 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 public class MixinRemapperVisitor extends ASTVisitor {
 
@@ -360,8 +359,7 @@ public class MixinRemapperVisitor extends ASTVisitor {
                 final String[] injectTargets = new String[inject.getInjectTargets().length];
                 for (int j = 0; j < inject.getInjectTargets().length; j++) {
                     final InjectTarget injectTarget = inject.getInjectTargets()[j];
-                    injectTargets[j] = remapInjectTarget(target, injectTarget)
-                            .orElse(injectTarget.getFullTarget());
+                    injectTargets[j] = remapInjectTarget(target, injectTarget);
                 }
 
                 final NormalAnnotation originalAnnotation = (NormalAnnotation) node.modifiers().get(i);
@@ -440,7 +438,7 @@ public class MixinRemapperVisitor extends ASTVisitor {
         return true;
     }
 
-    private Optional<String> remapInjectTarget(final ClassMapping<?, ?> target, final InjectTarget injectTarget) {
+    private String remapInjectTarget(final ClassMapping<?, ?> target, final InjectTarget injectTarget) {
         final String targetName = injectTarget.getTargetName();
 
         if (injectTarget.getFieldType().isPresent()) {
@@ -462,9 +460,9 @@ public class MixinRemapperVisitor extends ASTVisitor {
                         deobfuscatedFieldType = this.mappings.deobfuscate(fieldType).toString();
                     }
 
-                    return Optional.of(deobfuscatedFieldType != null ?
+                    return deobfuscatedFieldType != null ?
                             deobfuscatedSignature.getName() + ":" + deobfuscatedFieldType :
-                            deobfuscatedSignature.getName());
+                            deobfuscatedSignature.getName();
                 }
             }
         }
@@ -477,13 +475,28 @@ public class MixinRemapperVisitor extends ASTVisitor {
                                 .orElse(true)) {
                     final MethodSignature deobfuscatedSignature = mapping.getDeobfuscatedSignature();
 
-                    return Optional.of(injectTarget.getMethodDescriptor().isPresent() ?
+                    return injectTarget.getMethodDescriptor().isPresent() ?
                             deobfuscatedSignature.getName() + deobfuscatedSignature.getDescriptor().toString() :
-                            deobfuscatedSignature.getName());
+                            deobfuscatedSignature.getName();
                 }
             }
         }
-        return Optional.empty();
+
+        final MappingSet mappings = target.getMappings();
+        final MethodDescriptor descriptor = injectTarget.getMethodDescriptor().orElse(null);
+        final Type type = injectTarget.getFieldType().orElse(null);
+
+        final StringBuilder remappedFull = new StringBuilder();
+        remappedFull.append(targetName);
+        if (descriptor != null) {
+            remappedFull.append(mappings.deobfuscate(descriptor));
+        }
+        if (type != null) {
+            remappedFull.append(':');
+            remappedFull.append(mappings.deobfuscate(type));
+        }
+
+        return remappedFull.toString();
     }
 
     private void remapSliceAnnotation(final AST ast, final ITypeBinding declaringClass, final NormalAnnotation atAnnotation,
@@ -524,8 +537,7 @@ public class MixinRemapperVisitor extends ASTVisitor {
 
                     if (atDatum.getTarget().isPresent()) {
                         final InjectTarget atTarget = atDatum.getTarget().get();
-                        final String newTarget = remapInjectTarget(atTargetMappings, atTarget)
-                                .orElse(atTarget.getFullTarget());
+                        final String newTarget = remapInjectTarget(atTargetMappings, atTarget);
                         String deobfTarget = "L" + deobfTargetClass + ";" + newTarget;
                         replaceExpression(ast, this.context, originalTarget, deobfTarget);
                     }
