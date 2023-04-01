@@ -25,11 +25,7 @@ repositories {
         }
     }
     maven {
-        url "https://lunarclient-947665438472.d.codeartifact.us-east-2.amazonaws.com/maven/maven/"
-        credentials {
-            username project.property("mavenUsername").toString()
-            password project.property("mavenPassword").toString()
-        }
+        url "artifactregistry://us-maven.pkg.dev/moonsworth-299m4oir/maven"
     }
 }
 
@@ -99,14 +95,8 @@ publishing {
     }
 
     repositories {
-        if (project.hasProperty("mavenUsername") && project.hasProperty("mavenPassword")) {
-            maven {
-                url = uri("https://lunarclient-947665438472.d.codeartifact.us-east-2.amazonaws.com/maven/maven/")
-                credentials {
-                    username = project.property("mavenUsername").toString()
-                    password = project.property("mavenPassword").toString()
-                }
-            }
+        maven {
+            url "artifactregistry://us-maven.pkg.dev/moonsworth-299m4oir/maven"
         }
     }
 }
