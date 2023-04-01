@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
 
     id 'net.minecrell.licenser' version '0.4.1'
+    id 'com.google.cloud.artifactregistry.gradle-plugin' version '2.2.0'
 }
 
 java {
@@ -25,7 +26,7 @@ repositories {
         }
     }
     maven {
-        url "artifactregistry://us-maven.pkg.dev/moonsworth-299m4oir/maven"
+        url 'artifactregistry://us-maven.pkg.dev/moonsworth-299m4oir/maven'
     }
 }
 
